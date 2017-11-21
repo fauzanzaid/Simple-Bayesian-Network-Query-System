@@ -37,6 +37,7 @@ class GUI(object):
 
 		self.LIN_SPC = 16
 		self.P_PAD = 20
+		self.W_PAD = 50
 
 		self.TXT_BOX_HT = 20
 		self.TXT_BOX_WD = 100
@@ -57,6 +58,11 @@ class GUI(object):
 		self.P1_WDP = self.P1_WD + 2*self.P_PAD
 		self.P2_WDP = self.P3_WDP = self.P4_WDP = self.P2_WD + 2*self.P_PAD
 		self.P5_WDP = self.P5_WD + 2*self.P_PAD
+
+		self.W_HT = self.P1_HTP + self.P2_HTP + self.P5_HTP
+		self.W_WD = max(self.P1_WDP, self.P2_WDP*3, self.P5_WDP)
+		self.W_HTP = self.W_HT + 2*self.W_PAD
+		self.W_WDP = self.W_WD + 2*self.W_PAD
 
 		self.P1_X = self.P_PAD + max(0, ( max(self.P2_WDP*3,self.P5_WDP) - self.P1_WDP )/2.0)
 		self.P2_X = self.P_PAD + max(0, ( max(self.P1_WDP,self.P5_WDP) - self.P2_WDP*3 )/2.0)
@@ -93,4 +99,14 @@ class GUI(object):
 
 
 	def run(self):
-		pass
+		self.scr = turtle.Screen()
+		self.scr.setup(width=self.W_WDP, height=self.W_HTP)
+		self.scr.setworldcoordinates(0-self.W_PAD, 0-self.W_PAD, self.W_WD+self.W_PAD, self.W_HT+self.W_PAD)
+		self.scr.title("Bayesian Network Solver")
+		self.scr.delay(0)
+
+		self.ttl_base = turtle.Turtle()
+		self.ttl_base.ht()
+		self.ttl_base.pu()
+		self.ttl_base.speed(0)
+		self.ttl_base.tracer(0,0)
