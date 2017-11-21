@@ -19,6 +19,8 @@ class GUI(object):
 
 		self.set_constants()
 
+		self.node_names = []
+
 
 	def set_constants(self):
 
@@ -94,11 +96,17 @@ class GUI(object):
 			return
 
 		func, args = self.qu_cmd.get()
+
 		if func == "quit":
 			self.scr.onclick(None)
 			self.scr.onkey(None, "q")
 			self.scr.bye()
 			return
+
+		elif func == "init_node_names":
+			self.node_names = args[0]
+
+		self.scr.ontimer(self.cmd_dispatcher, self.DISPATCH_DELAY)
 
 
 	def run(self):

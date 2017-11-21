@@ -3,6 +3,8 @@
 
 import threading
 
+from bayesian_network import BayesianNetwork
+
 
 class Main(threading.Thread):
 	"""docstring for Main"""
@@ -11,6 +13,16 @@ class Main(threading.Thread):
 		self.qu_usr_ip = qu_usr_ip
 		self.qu_cmd = qu_cmd
 
+		self.input_filename = "input1.txt"
+
+		self.init_network()
+
+
+	def init_network(self):
+		self.bn = BayesianNetwork()
+		self.bn.init_from_file(self.input_filename)
+		self.node_names = [n.name for n in self.bn.nodes]
+
 
 	def send_cmd(self, cmd, *args):
 		msg = (cmd, args)
@@ -18,6 +30,8 @@ class Main(threading.Thread):
 
 
 	def run(self):
+
+		self.send_cmd("init_node_names", self.node_names)
 
 		while True:
 			usr_ip = self.qu_usr_ip.get()
