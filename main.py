@@ -32,6 +32,7 @@ class Main(threading.Thread):
 	def run(self):
 
 		self.send_cmd("init_node_names", self.node_names)
+		self.send_cmd("draw_base")
 
 		while True:
 			usr_ip = self.qu_usr_ip.get()

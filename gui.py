@@ -66,17 +66,79 @@ class GUI(object):
 		self.W_HTP = self.W_HT + 2*self.W_PAD
 		self.W_WDP = self.W_WD + 2*self.W_PAD
 
-		self.P1_X = self.P_PAD + max(0, ( max(self.P2_WDP*3,self.P5_WDP) - self.P1_WDP )/2.0)
-		self.P2_X = self.P_PAD + max(0, ( max(self.P1_WDP,self.P5_WDP) - self.P2_WDP*3 )/2.0)
-		self.P3_X = self.P_PAD + self.P2_X + self.P2_WDP
-		self.P4_X = self.P_PAD + self.P3_X + self.P3_WDP
-		self.P5_X = self.P_PAD + max(0, ( max(self.P2_WDP*3,self.P1_WDP) - self.P5_WDP )/2.0)
+		self.P1_XP = max(0, ( max(self.P2_WDP*3,self.P5_WDP) - self.P1_WDP )/2.0)
+		self.P2_XP = max(0, ( max(self.P1_WDP,self.P5_WDP) - self.P2_WDP*3 )/2.0)
+		self.P3_XP = self.P2_XP + self.P2_WDP
+		self.P4_XP = self.P3_XP + self.P3_WDP
+		self.P5_XP = max(0, ( max(self.P2_WDP*3,self.P1_WDP) - self.P5_WDP )/2.0)
 
-		self.P1_Y = - self.P_PAD + self.P5_HTP + self.P2_HTP
-		self.P2_Y = - self.P_PAD + self.P5_HTP
-		self.P3_Y = self.P2_Y
-		self.P4_Y = self.P2_Y
-		self.P5_Y = - self.P_PAD + 0
+		self.P1_YP = self.P5_HTP + self.P2_HTP + self.P1_HTP
+		self.P2_YP = self.P5_HTP + self.P2_HTP
+		self.P3_YP = self.P2_YP
+		self.P4_YP = self.P2_YP
+		self.P5_YP = self.P5_HTP
+
+		self.P1_X = self.P_PAD + self.P1_XP
+		self.P2_X = self.P_PAD + self.P2_XP
+		self.P3_X = self.P_PAD + self.P3_XP
+		self.P4_X = self.P_PAD + self.P4_XP
+		self.P5_X = self.P_PAD + self.P5_XP
+
+		self.P1_Y = - self.P_PAD + self.P1_YP
+		self.P2_Y = - self.P_PAD + self.P2_YP
+		self.P3_Y = - self.P_PAD + self.P3_YP
+		self.P4_Y = - self.P_PAD + self.P4_YP
+		self.P5_Y = - self.P_PAD + self.P5_YP
+
+
+	def draw_base(self):
+		self.draw_base_P1()
+		self.draw_base_P2()
+		self.draw_base_P3()
+		self.draw_base_P4()
+		self.draw_base_P5()
+
+
+	def draw_base_P1(self):
+		self.draw_boundary(self.P1_XP, self.P1_YP, self.P1_HTP, self.P1_WDP)
+
+
+	def draw_base_P2(self):
+		self.draw_boundary(self.P2_XP, self.P2_YP, self.P2_HTP, self.P2_WDP)
+
+
+	def draw_base_P3(self):
+		self.draw_boundary(self.P3_XP, self.P3_YP, self.P3_HTP, self.P3_WDP)
+
+
+	def draw_base_P4(self):
+		self.draw_boundary(self.P4_XP, self.P4_YP, self.P4_HTP, self.P4_WDP)
+
+
+	def draw_base_P5(self):
+		self.draw_boundary(self.P5_XP, self.P5_YP, self.P5_HTP, self.P5_WDP)
+
+
+	def draw_boundary(self, cood_x, cood_y, ht, wd):
+		old_color = self.ttl_base.color()
+
+		self.ttl_base.goto(cood_x, cood_y)
+
+		self.ttl_base.pd()
+		self.ttl_base.color((0.9,0.9,0.9))
+
+		self.ttl_base.seth(0)
+		self.ttl_base.fd(wd)
+		self.ttl_base.rt(90)
+		self.ttl_base.fd(ht)
+		self.ttl_base.rt(90)
+		self.ttl_base.fd(wd)
+		self.ttl_base.rt(90)
+		self.ttl_base.fd(ht)
+		self.ttl_base.rt(90)
+
+		self.ttl_base.color(*old_color)
+		self.ttl_base.pu()
 
 
 	def send_mouse_click(self, x, y):
@@ -105,6 +167,9 @@ class GUI(object):
 
 		elif func == "init_node_names":
 			self.node_names = args[0]
+
+		elif func == "draw_base":
+			self.draw_base()
 
 		self.scr.ontimer(self.cmd_dispatcher, self.DISPATCH_DELAY)
 
