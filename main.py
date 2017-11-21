@@ -12,5 +12,18 @@ class Main(threading.Thread):
 		self.qu_cmd = qu_cmd
 
 
+	def send_cmd(self, cmd, *args):
+		msg = (cmd, args)
+		self.qu_cmd.put(msg)
+
+
 	def run(self):
-		pass
+
+		while True:
+			usr_ip = self.qu_usr_ip.get()
+			time, dev, arg = usr_ip
+			# print "Main rcvd", usr_ip
+
+			if arg == 'q':
+				self.send_cmd("quit")
+				break
