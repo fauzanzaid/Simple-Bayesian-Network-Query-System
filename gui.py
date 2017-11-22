@@ -90,9 +90,6 @@ class GUI(object):
 		self.P4_Y = - self.P_PAD + self.P4_YP
 		self.P5_Y = - self.P_PAD + self.P5_YP
 
-		print self.W_HT, self.W_HTP
-		print self.W_WD, self.W_WDP
-
 
 	def draw_base(self):
 		self.draw_base_P1()
@@ -282,10 +279,6 @@ class TextBox(object):
 		self.ttl_base.color(*old_color)
 		self.ttl_base.pu()
 
-		self.write()
-
-
-	def write(self):
 		self.ttl_base.goto(self.cood_x + self.PAD + self.TXT_PAD_X, self.cood_y - self.HTP + self.PAD + self.TXT_PAD_Y)
 		self.ttl_base.write(self.text, font=("Mono", 8, "normal"))
 
@@ -325,32 +318,33 @@ class ButtonBox(TextBox):
 
 
 	def on(self):
-		old_color = self.ttl_base.color()
-		# old_size = self.ttl_base.pensize()
+		old_color = self.ttl_lit.color()
+		# old_size = self.ttl_lit.pensize()
 
-		self.ttl_base.goto(self.cood_x+self.PAD, self.cood_y-self.PAD)
+		self.ttl_lit.goto(self.cood_x+self.PAD, self.cood_y-self.PAD)
 
-		self.ttl_base.pd()
-		self.ttl_base.color(*self.COL_ON)
-		# self.ttl_base.pensize(old_size)
-		self.ttl_base.fill(True)
+		self.ttl_lit.pd()
+		self.ttl_lit.color(*self.COL_ON)
+		# self.ttl_lit.pensize(old_size)
+		self.ttl_lit.fill(True)
 
-		self.ttl_base.seth(0)
-		self.ttl_base.fd(self.WD)
-		self.ttl_base.rt(90)
-		self.ttl_base.fd(self.HT)
-		self.ttl_base.rt(90)
-		self.ttl_base.fd(self.WD)
-		self.ttl_base.rt(90)
-		self.ttl_base.fd(self.HT)
-		self.ttl_base.rt(90)
+		self.ttl_lit.seth(0)
+		self.ttl_lit.fd(self.WD)
+		self.ttl_lit.rt(90)
+		self.ttl_lit.fd(self.HT)
+		self.ttl_lit.rt(90)
+		self.ttl_lit.fd(self.WD)
+		self.ttl_lit.rt(90)
+		self.ttl_lit.fd(self.HT)
+		self.ttl_lit.rt(90)
 
-		self.ttl_base.fill(False)
-		# self.ttl_base.pensize(old_size)
-		self.ttl_base.color(*old_color)
-		self.ttl_base.pu()
+		self.ttl_lit.fill(False)
+		# self.ttl_lit.pensize(old_size)
+		self.ttl_lit.color(*old_color)
+		self.ttl_lit.pu()
 
-		self.write()
+		self.ttl_lit.goto(self.cood_x + self.PAD + self.TXT_PAD_X, self.cood_y - self.HTP + self.PAD + self.TXT_PAD_Y)
+		self.ttl_lit.write(self.text, font=("Mono", 8, "normal"))
 
 
 	def off(self):
