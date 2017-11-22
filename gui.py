@@ -136,7 +136,7 @@ class GUI(object):
 		self.P2_btn_boxes = []
 		for i,name in enumerate(self.node_names):
 			self.P2_btn_boxes.append(ButtonBox(self.ttl_base, self.P2_X, self.P2_Y - TitleBox.HTP - i*ButtonBox.HTP, name))
-			self.P2_btn_boxes.append(ButtonBox(self.ttl_base, self.P2_X + ButtonBox.WDP, self.P2_Y - TitleBox.HTP - i*ButtonBox.HTP, "¬"+name))
+			self.P2_btn_boxes.append(ButtonBox(self.ttl_base, self.P2_X + ButtonBox.WDP, self.P2_Y - TitleBox.HTP - i*ButtonBox.HTP, "~"+name))
 
 
 	def init_P3_boxes(self):
@@ -144,7 +144,7 @@ class GUI(object):
 		self.P3_btn_boxes = []
 		for i,name in enumerate(self.node_names):
 			self.P3_btn_boxes.append(ButtonBox(self.ttl_base, self.P3_X, self.P3_Y - TitleBox.HTP - i*ButtonBox.HTP, name))
-			self.P3_btn_boxes.append(ButtonBox(self.ttl_base, self.P3_X + ButtonBox.WDP, self.P3_Y - TitleBox.HTP - i*ButtonBox.HTP, "¬"+name))
+			self.P3_btn_boxes.append(ButtonBox(self.ttl_base, self.P3_X + ButtonBox.WDP, self.P3_Y - TitleBox.HTP - i*ButtonBox.HTP, "~"+name))
 
 
 	def init_P4_boxes(self):
@@ -174,6 +174,22 @@ class GUI(object):
 
 		self.ttl_base.color(*old_color)
 		self.ttl_base.pu()
+
+
+	def get_box_by_name(self, section, name):
+		if section == "qry":
+			btn_boxes = self.P2_btn_boxes
+		elif section == "cond":
+			btn_boxes = self.P3_btn_boxes
+		elif section == "mrkv":
+			btn_boxes = self.P4_btn_boxes
+		else:
+			return None
+
+		for box in btn_boxes:
+			if box.text == name:
+				return box
+		return None
 
 
 	def get_box_from_cood(self, x, y):
@@ -218,6 +234,12 @@ class GUI(object):
 
 		elif func == "draw_base":
 			self.draw_base()
+
+		elif func == "on":
+			self.get_box_by_name(args[0], args[1]).on()
+
+		elif func == "off":
+			self.get_box_by_name(args[0], args[1]).off()
 
 		self.scr.ontimer(self.cmd_dispatcher, self.DISPATCH_DELAY)
 
@@ -319,7 +341,7 @@ class ButtonBox(TextBox):
 	"""docstring for ButtonBox"""
 
 	COL = ((0,0,0),(0.7,0.8,0.7))
-	COL_ON = ((0,0,0),(0.8,1.0,0.8))
+	COL_ON = ((0,0,0),(1.0,1.0,0.8))
 
 	def __init__(self, ttl_base, cood_x, cood_y, text=""):
 		super(ButtonBox, self).__init__(ttl_base, cood_x, cood_y, text)

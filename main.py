@@ -1,5 +1,5 @@
 #! /usr/bin/python2
-
+# -*- coding: utf-8 -*-
 
 import threading
 
@@ -8,14 +8,20 @@ from bayesian_network import BayesianNetwork
 
 class Main(threading.Thread):
 	"""docstring for Main"""
+
+	MAX_SEL = 10
+
 	def __init__(self, qu_usr_ip, qu_cmd):
 		super(Main, self).__init__()
 		self.qu_usr_ip = qu_usr_ip
 		self.qu_cmd = qu_cmd
 
 		self.input_filename = "input1.txt"
-
 		self.init_network()
+
+		self.cur_names_qry = []
+		self.cur_names_cond = []
+		self.cur_name_mrkv = None
 
 
 	def init_network(self):
@@ -49,10 +55,62 @@ class Main(threading.Thread):
 					pass
 
 				elif arg[0] == "qry":
-					pass
+					if arg[1] in self.cur_names_qry:
+						self.send_cmd("off", arg[0], arg[1])
+						self.cur_names_qry.remove(arg[1])
+						# Calc
+					elif arg[1][1:] in self.cur_names_qry:
+						self.send_cmd("off", arg[0], arg[1][1:])
+						self.cur_names_qry.remove(arg[1][1:])
+						self.send_cmd("on", arg[0], arg[1])
+						self.cur_names_qry.append(arg[1])
+						# Calc
+					elif "~"+arg[1] in self.cur_names_qry:
+						self.send_cmd("off", arg[0], "~"+arg[1])
+						self.cur_names_qry.remove("~"+arg[1])
+						self.send_cmd("on", arg[0], arg[1])
+						self.cur_names_qry.append(arg[1])
+						# Calc
+					elif len(self.cur_names_qry) < self.MAX_SEL:
+						self.send_cmd("on", arg[0], arg[1])
+						self.cur_names_qry.append(arg[1])
+						# Calc
+					else:
+						pass
+						# Send msg
 
 				elif arg[0] == "cond":
-					pass
+					if arg[1] in self.cur_names_cond:
+						self.send_cmd("off", arg[0], arg[1])
+						self.cur_names_cond.remove(arg[1])
+						# Calc
+					elif arg[1][1:] in self.cur_names_cond:
+						self.send_cmd("off", arg[0], arg[1][1:])
+						self.cur_names_cond.remove(arg[1][1:])
+						self.send_cmd("on", arg[0], arg[1])
+						self.cur_names_cond.append(arg[1])
+						# Calc
+					elif "~"+arg[1] in self.cur_names_cond:
+						self.send_cmd("off", arg[0], "~"+arg[1])
+						self.cur_names_cond.remove("~"+arg[1])
+						self.send_cmd("on", arg[0], arg[1])
+						self.cur_names_cond.append(arg[1])
+						# Calc
+					elif len(self.cur_names_cond) < self.MAX_SEL:
+						self.send_cmd("on", arg[0], arg[1])
+						self.cur_names_cond.append(arg[1])
+						# Calc
+					else:
+						pass
+						# Send msg
 
 				elif arg[0] == "mrkv":
-					pass
+					if self.cur_name_mrkv == None:
+						self.send_cmd("on", arg[0], arg[1])
+						self.cur_name_mrkv = arg[1]
+						# Show blanket
+					else:
+						self.send_cmd("off", arg[0], self.cur_name_mrkv)
+						self.send_cmd("on", arg[0], arg[1])
+						self.cur_name_mrkv = arg[1]
+						# Show blanket
