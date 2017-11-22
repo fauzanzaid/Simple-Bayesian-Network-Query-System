@@ -36,9 +36,23 @@ class Main(threading.Thread):
 
 		while True:
 			usr_ip = self.qu_usr_ip.get()
-			time, dev, arg = usr_ip
+			t, dev, arg = usr_ip
 			# print "Main rcvd", usr_ip
 
-			if arg == 'q':
-				self.send_cmd("quit")
-				break
+			if dev == "keypress":
+				if arg == 'q':
+					self.send_cmd("quit")
+					break
+
+			else:
+				if arg == None:
+					pass
+
+				elif arg[0] == "qry":
+					pass
+
+				elif arg[0] == "cond":
+					pass
+
+				elif arg[0] == "mrkv":
+					pass

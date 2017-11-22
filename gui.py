@@ -176,9 +176,22 @@ class GUI(object):
 		self.ttl_base.pu()
 
 
+	def get_box_from_cood(self, x, y):
+		for i,box in enumerate(self.P2_btn_boxes):
+			if box.cood_in_box(x,y):
+				return ("qry", box.text)
+		for i,box in enumerate(self.P3_btn_boxes):
+			if box.cood_in_box(x,y):
+				return ("cond", box.text)
+		for i,box in enumerate(self.P4_btn_boxes):
+			if box.cood_in_box(x,y):
+				return ("mrkv", box.text)
+		return None
+
+
 	def send_mouse_click(self, x, y):
-		pos = None
-		msg = (time.time()-self.time_init, "mouse", pos)
+		box = self.get_box_from_cood(x,y)
+		msg = (time.time()-self.time_init, "mouse", box)
 		self.qu_usr_ip.put(msg)
 
 
@@ -349,3 +362,10 @@ class ButtonBox(TextBox):
 
 	def off(self):
 		self.ttl_lit.clear()
+
+
+	def cood_in_box(self, x, y):
+		if self.cood_x <= x <= self.cood_x + self.WD:
+			if self.cood_y >= y >= self.cood_y - self.HT:
+				return True
+		return False
