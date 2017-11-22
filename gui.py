@@ -35,16 +35,16 @@ class GUI(object):
 		#    └───────────┘   
 
 
-		self.MAX_VAR = 25
+		self.MAX_VAR = 15
 
 		self.LIN_SPC = 16
 		self.P_PAD = 20
 		self.W_PAD = 50
 
-		self.TTL_BOX_HT = TitleBox.HT
-		self.TTL_BOX_WD = TitleBox.WD
-		self.TXT_BOX_HT = TextBox.HT
-		self.TXT_BOX_WD = TextBox.WD
+		self.TTL_BOX_HT = TitleBox.HTP
+		self.TTL_BOX_WD = TitleBox.WDP
+		self.TXT_BOX_HT = TextBox.HTP
+		self.TXT_BOX_WD = TextBox.WDP
 
 		self.P1_HT = self.LIN_SPC*3
 		self.P1_WD = 400
@@ -90,6 +90,9 @@ class GUI(object):
 		self.P4_Y = - self.P_PAD + self.P4_YP
 		self.P5_Y = - self.P_PAD + self.P5_YP
 
+		print self.W_HT, self.W_HTP
+		print self.W_WD, self.W_WDP
+
 
 	def draw_base(self):
 		self.draw_base_P1()
@@ -104,19 +107,54 @@ class GUI(object):
 
 
 	def draw_base_P2(self):
+		self.init_P2_boxes()
 		self.draw_boundary(self.P2_XP, self.P2_YP, self.P2_HTP, self.P2_WDP)
+		self.P2_ttl_box.draw_base()
+		for box in self.P2_btn_boxes:
+			box.draw_base()
 
 
 	def draw_base_P3(self):
+		self.init_P3_boxes()
 		self.draw_boundary(self.P3_XP, self.P3_YP, self.P3_HTP, self.P3_WDP)
+		self.P3_ttl_box.draw_base()
+		for box in self.P3_btn_boxes:
+			box.draw_base()
 
 
 	def draw_base_P4(self):
+		self.init_P4_boxes()
 		self.draw_boundary(self.P4_XP, self.P4_YP, self.P4_HTP, self.P4_WDP)
+		self.P4_ttl_box.draw_base()
+		for box in self.P4_btn_boxes:
+			box.draw_base()
 
 
 	def draw_base_P5(self):
 		self.draw_boundary(self.P5_XP, self.P5_YP, self.P5_HTP, self.P5_WDP)
+
+
+	def init_P2_boxes(self):
+		self.P2_ttl_box = TitleBox(self.ttl_base, self.P2_X, self.P2_Y, "Query variables")
+		self.P2_btn_boxes = []
+		for i,name in enumerate(self.node_names):
+			self.P2_btn_boxes.append(ButtonBox(self.ttl_base, self.P2_X, self.P2_Y - TitleBox.HTP - i*ButtonBox.HTP, name))
+			self.P2_btn_boxes.append(ButtonBox(self.ttl_base, self.P2_X + ButtonBox.WDP, self.P2_Y - TitleBox.HTP - i*ButtonBox.HTP, "¬"+name))
+
+
+	def init_P3_boxes(self):
+		self.P3_ttl_box = TitleBox(self.ttl_base, self.P3_X, self.P3_Y, "Condition variables")
+		self.P3_btn_boxes = []
+		for i,name in enumerate(self.node_names):
+			self.P3_btn_boxes.append(ButtonBox(self.ttl_base, self.P3_X, self.P3_Y - TitleBox.HTP - i*ButtonBox.HTP, name))
+			self.P3_btn_boxes.append(ButtonBox(self.ttl_base, self.P3_X + ButtonBox.WDP, self.P3_Y - TitleBox.HTP - i*ButtonBox.HTP, "¬"+name))
+
+
+	def init_P4_boxes(self):
+		self.P4_ttl_box = TitleBox(self.ttl_base, self.P4_X, self.P4_Y, "Markov Blanket")
+		self.P4_btn_boxes = []
+		for i,name in enumerate(self.node_names):
+			self.P4_btn_boxes.append(ButtonBox(self.ttl_base, self.P4_X, self.P4_Y - TitleBox.HTP - i*ButtonBox.HTP, name))
 
 
 	def draw_boundary(self, cood_x, cood_y, ht, wd):
@@ -200,10 +238,11 @@ class GUI(object):
 class TextBox(object):
 	"""docstring for TextBox"""
 
-	WD = 100
+	WD = 72.5
 	HT = 20
-	PAD = 5
-	TXT_PAD = 2
+	PAD = 2.5
+	TXT_PAD_X = 7
+	TXT_PAD_Y = 2
 	COL = ((0,0,0),(0.9,0.9,0.9))
 
 	WDP = WD + PAD*2
@@ -221,7 +260,7 @@ class TextBox(object):
 		old_color = self.ttl_base.color()
 		# old_size = self.ttl_base.pensize()
 
-		self.ttl_base.goto(self.cood_x, self.cood_y)
+		self.ttl_base.goto(self.cood_x+self.PAD, self.cood_y-self.PAD)
 
 		self.ttl_base.pd()
 		self.ttl_base.color(*self.COL)
@@ -247,7 +286,7 @@ class TextBox(object):
 
 
 	def write(self):
-		self.ttl_base.goto(self.cood_x+self.TXT_PAD, self.cood_y-self.HT+self.TXT_PAD)
+		self.ttl_base.goto(self.cood_x + self.PAD + self.TXT_PAD_X, self.cood_y - self.HTP + self.PAD + self.TXT_PAD_Y)
 		self.ttl_base.write(self.text, font=("Mono", 8, "normal"))
 
 
@@ -256,10 +295,10 @@ class TitleBox(TextBox):
 	"""docstring for TitleBox"""
 
 	WD = 150
-	HT = 30
-	PAD = 5
-	TXT_PAD = 7
-	COL = ((0,0,0),(0.8,0.8,1.0))
+	HT = 20
+	PAD = 2.5
+	TXT_PAD = 2
+	COL = ((0,0,0),(0.7,0.7,1.0))
 
 
 	WDP = WD + PAD*2
@@ -289,7 +328,7 @@ class ButtonBox(TextBox):
 		old_color = self.ttl_base.color()
 		# old_size = self.ttl_base.pensize()
 
-		self.ttl_base.goto(self.cood_x, self.cood_y)
+		self.ttl_base.goto(self.cood_x+self.PAD, self.cood_y-self.PAD)
 
 		self.ttl_base.pd()
 		self.ttl_base.color(*self.COL_ON)
