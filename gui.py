@@ -51,7 +51,7 @@ class GUI(object):
 		self.P2_HT = self.P3_HT = self.P4_HT = self.TTL_BOX_HT + self.TXT_BOX_HT*self.MAX_VAR
 		self.P2_WD = self.P3_WD = self.P4_WD = max(self.TTL_BOX_WD, self.TXT_BOX_WD*2)
 		self.P5_HT = self.LIN_SPC*2
-		self.P5_WD = 400
+		self.P5_WD = 620
 
 		self.P1_HTP = self.P1_HT + 2*self.P_PAD
 		self.P2_HTP = self.P3_HTP = self.P4_HTP = self.P2_HT + 2*self.P_PAD
@@ -154,7 +154,7 @@ class GUI(object):
 
 	def draw_text_prob_P5(self, text):
 		self.ttl_P5_text.goto(self.P5_X, self.P5_Y - self.P5_HT)
-		self.ttl_P5_text.write("Calculated Probability:  "+text, font=("Mono", 8, "normal"))
+		self.ttl_P5_text.write("Calculated Probability: "+text, font=("Mono", 8, "normal"))
 
 
 	def init_P2_boxes(self):
