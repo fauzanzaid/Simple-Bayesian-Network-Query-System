@@ -46,7 +46,7 @@ class GUI(object):
 		self.TXT_BOX_HT = TextBox.HTP
 		self.TXT_BOX_WD = TextBox.WDP
 
-		self.P1_HT = self.LIN_SPC*3
+		self.P1_HT = self.LIN_SPC*1
 		self.P1_WD = 400
 		self.P2_HT = self.P3_HT = self.P4_HT = self.TTL_BOX_HT + self.TXT_BOX_HT*self.MAX_VAR
 		self.P2_WD = self.P3_WD = self.P4_WD = max(self.TTL_BOX_WD, self.TXT_BOX_WD*2)
@@ -103,6 +103,12 @@ class GUI(object):
 		self.draw_boundary(self.P1_XP, self.P1_YP, self.P1_HTP, self.P1_WDP)
 
 
+	def draw_text_P1(self, text):
+		self.ttl_P1_text.clear()
+		self.ttl_P1_text.goto(self.P1_X, self.P1_Y - self.P1_HT)
+		self.ttl_P1_text.write(text, font=("Mono", 8, "normal"))
+
+
 	def draw_base_P2(self):
 		self.init_P2_boxes()
 		self.draw_boundary(self.P2_XP, self.P2_YP, self.P2_HTP, self.P2_WDP)
@@ -128,10 +134,10 @@ class GUI(object):
 
 
 	def draw_mrkv_P4(self, node_names):
-		self.ttl_mrkv.clear()
+		self.ttl_P4_mrkv.clear()
 		mrkv_boxes = []
 		for i,name in enumerate(node_names):
-			mrkv_boxes.append(TextBox(self.ttl_mrkv, self.P4_X + TextBox.WDP, self.P4_Y - TitleBox.HTP - i*TextBox.HTP, name))
+			mrkv_boxes.append(TextBox(self.ttl_P4_mrkv, self.P4_X + TextBox.WDP, self.P4_Y - TitleBox.HTP - i*TextBox.HTP, name))
 		for box in mrkv_boxes:
 			box.draw_base()
 
@@ -230,6 +236,7 @@ class GUI(object):
 			self.scr.ontimer(self.cmd_dispatcher, self.DISPATCH_DELAY)
 			return
 
+		self.draw_text_P1("")
 		func, args = self.qu_cmd.get()
 
 		if func == "quit":
@@ -249,8 +256,12 @@ class GUI(object):
 
 		elif func == "off":
 			self.get_box_by_name(args[0], args[1]).off()
+
 		elif func == "draw_mrkv":
 			self.draw_mrkv_P4(args[0])
+
+		elif func == "display_msg":
+			self.draw_text_P1(args[0])
 
 		self.scr.ontimer(self.cmd_dispatcher, self.DISPATCH_DELAY)
 
@@ -268,11 +279,17 @@ class GUI(object):
 		self.ttl_base.speed(0)
 		self.ttl_base.tracer(0,0)
 
-		self.ttl_mrkv = turtle.Turtle()
-		self.ttl_mrkv.ht()
-		self.ttl_mrkv.pu()
-		self.ttl_mrkv.speed(0)
-		self.ttl_mrkv.tracer(0,0)
+		self.ttl_P1_text = turtle.Turtle()
+		self.ttl_P1_text.ht()
+		self.ttl_P1_text.pu()
+		self.ttl_P1_text.speed(0)
+		self.ttl_P1_text.tracer(0,0)
+
+		self.ttl_P4_mrkv = turtle.Turtle()
+		self.ttl_P4_mrkv.ht()
+		self.ttl_P4_mrkv.pu()
+		self.ttl_P4_mrkv.speed(0)
+		self.ttl_P4_mrkv.tracer(0,0)
 
 		self.scr.ontimer(self.cmd_dispatcher, self.DISPATCH_DELAY)
 		self.scr.onclick(self.send_mouse_click)

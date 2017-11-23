@@ -11,6 +11,9 @@ class Main(threading.Thread):
 
 	MAX_SEL = 10
 
+	MSG_WELCOME = "Welcome to Bayesian Network solver! Press q to quit"
+	MSG_SEL_LMT = "You cannot select more than 10 variables!"
+
 	def __init__(self, qu_usr_ip, qu_cmd):
 		super(Main, self).__init__()
 		self.qu_usr_ip = qu_usr_ip
@@ -39,6 +42,7 @@ class Main(threading.Thread):
 
 		self.send_cmd("init_node_names", self.node_names)
 		self.send_cmd("draw_base")
+		self.send_cmd("display_msg", self.MSG_WELCOME)
 
 		while True:
 			usr_ip = self.qu_usr_ip.get()
@@ -76,8 +80,7 @@ class Main(threading.Thread):
 						self.cur_names_qry.append(arg[1])
 						# Calc
 					else:
-						pass
-						# Send msg
+						self.send_cmd("display_msg", self.MSG_SEL_LMT)
 
 				elif arg[0] == "cond":
 					if arg[1] in self.cur_names_cond:
@@ -101,8 +104,7 @@ class Main(threading.Thread):
 						self.cur_names_cond.append(arg[1])
 						# Calc
 					else:
-						pass
-						# Send msg
+						self.send_cmd("display_msg", self.MSG_SEL_LMT)
 
 				elif arg[0] == "mrkv":
 					if self.cur_name_mrkv != None:
