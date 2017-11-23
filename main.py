@@ -13,6 +13,7 @@ class Main(threading.Thread):
 
 	MSG_WELCOME = "Welcome to Bayesian Network solver! Press q to quit"
 	MSG_SEL_LMT = "You cannot select more than 10 variables!"
+	MSG_WORKING = "Calculating probability..."
 
 	def __init__(self, qu_usr_ip, qu_cmd):
 		super(Main, self).__init__()
@@ -58,53 +59,55 @@ class Main(threading.Thread):
 				if arg == None:
 					pass
 
-				elif arg[0] == "qry":
-					if arg[1] in self.cur_names_qry:
-						self.send_cmd("off", arg[0], arg[1])
-						self.cur_names_qry.remove(arg[1])
-						# Calc
-					elif arg[1][1:] in self.cur_names_qry:
-						self.send_cmd("off", arg[0], arg[1][1:])
-						self.cur_names_qry.remove(arg[1][1:])
-						self.send_cmd("on", arg[0], arg[1])
-						self.cur_names_qry.append(arg[1])
-						# Calc
-					elif "~"+arg[1] in self.cur_names_qry:
-						self.send_cmd("off", arg[0], "~"+arg[1])
-						self.cur_names_qry.remove("~"+arg[1])
-						self.send_cmd("on", arg[0], arg[1])
-						self.cur_names_qry.append(arg[1])
-						# Calc
-					elif len(self.cur_names_qry) < self.MAX_SEL:
-						self.send_cmd("on", arg[0], arg[1])
-						self.cur_names_qry.append(arg[1])
-						# Calc
-					else:
-						self.send_cmd("display_msg", self.MSG_SEL_LMT)
+				elif arg[0] == "qry" or arg[0] == "cond":
 
-				elif arg[0] == "cond":
-					if arg[1] in self.cur_names_cond:
-						self.send_cmd("off", arg[0], arg[1])
-						self.cur_names_cond.remove(arg[1])
-						# Calc
-					elif arg[1][1:] in self.cur_names_cond:
-						self.send_cmd("off", arg[0], arg[1][1:])
-						self.cur_names_cond.remove(arg[1][1:])
-						self.send_cmd("on", arg[0], arg[1])
-						self.cur_names_cond.append(arg[1])
-						# Calc
-					elif "~"+arg[1] in self.cur_names_cond:
-						self.send_cmd("off", arg[0], "~"+arg[1])
-						self.cur_names_cond.remove("~"+arg[1])
-						self.send_cmd("on", arg[0], arg[1])
-						self.cur_names_cond.append(arg[1])
-						# Calc
-					elif len(self.cur_names_cond) < self.MAX_SEL:
-						self.send_cmd("on", arg[0], arg[1])
-						self.cur_names_cond.append(arg[1])
-						# Calc
-					else:
-						self.send_cmd("display_msg", self.MSG_SEL_LMT)
+					if arg[0] == "qry":
+						if arg[1] in self.cur_names_qry:
+							self.send_cmd("off", arg[0], arg[1])
+							self.cur_names_qry.remove(arg[1])
+						elif arg[1][1:] in self.cur_names_qry:
+							self.send_cmd("off", arg[0], arg[1][1:])
+							self.cur_names_qry.remove(arg[1][1:])
+							self.send_cmd("on", arg[0], arg[1])
+							self.cur_names_qry.append(arg[1])
+						elif "~"+arg[1] in self.cur_names_qry:
+							self.send_cmd("off", arg[0], "~"+arg[1])
+							self.cur_names_qry.remove("~"+arg[1])
+							self.send_cmd("on", arg[0], arg[1])
+							self.cur_names_qry.append(arg[1])
+						elif len(self.cur_names_qry) < self.MAX_SEL:
+							self.send_cmd("on", arg[0], arg[1])
+							self.cur_names_qry.append(arg[1])
+						else:
+							self.send_cmd("display_msg", self.MSG_SEL_LMT)
+							continue
+
+					elif arg[0] == "cond":
+						if arg[1] in self.cur_names_cond:
+							self.send_cmd("off", arg[0], arg[1])
+							self.cur_names_cond.remove(arg[1])
+						elif arg[1][1:] in self.cur_names_cond:
+							self.send_cmd("off", arg[0], arg[1][1:])
+							self.cur_names_cond.remove(arg[1][1:])
+							self.send_cmd("on", arg[0], arg[1])
+							self.cur_names_cond.append(arg[1])
+						elif "~"+arg[1] in self.cur_names_cond:
+							self.send_cmd("off", arg[0], "~"+arg[1])
+							self.cur_names_cond.remove("~"+arg[1])
+							self.send_cmd("on", arg[0], arg[1])
+							self.cur_names_cond.append(arg[1])
+						elif len(self.cur_names_cond) < self.MAX_SEL:
+							self.send_cmd("on", arg[0], arg[1])
+							self.cur_names_cond.append(arg[1])
+						else:
+							self.send_cmd("display_msg", self.MSG_SEL_LMT)
+							continue
+
+					# Calc
+					self.send_cmd("display_expr", "")
+					self.send_cmd("display_msg", self.MSG_WORKING)
+					# Calc
+					self.send_cmd("display_prob", "")
 
 				elif arg[0] == "mrkv":
 					if self.cur_name_mrkv != None:

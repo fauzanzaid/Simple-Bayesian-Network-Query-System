@@ -146,6 +146,17 @@ class GUI(object):
 		self.draw_boundary(self.P5_XP, self.P5_YP, self.P5_HTP, self.P5_WDP)
 
 
+	def draw_text_expr_P5(self, text):
+		self.ttl_P5_text.clear()
+		self.ttl_P5_text.goto(self.P5_X, self.P5_Y - self.P5_HT + self.LIN_SPC)
+		self.ttl_P5_text.write("Generated Expression:   "+text, font=("Mono", 8, "normal"))
+
+
+	def draw_text_prob_P5(self, text):
+		self.ttl_P5_text.goto(self.P5_X, self.P5_Y - self.P5_HT)
+		self.ttl_P5_text.write("Calculated Probability:  "+text, font=("Mono", 8, "normal"))
+
+
 	def init_P2_boxes(self):
 		self.P2_ttl_box = TitleBox(self.ttl_base, self.P2_X, self.P2_Y, "Query variables")
 		self.P2_btn_boxes = []
@@ -263,6 +274,12 @@ class GUI(object):
 		elif func == "display_msg":
 			self.draw_text_P1(args[0])
 
+		elif func == "display_expr":
+			self.draw_text_expr_P5(args[0])
+
+		elif func == "display_prob":
+			self.draw_text_prob_P5(args[0])
+
 		self.scr.ontimer(self.cmd_dispatcher, self.DISPATCH_DELAY)
 
 
@@ -290,6 +307,12 @@ class GUI(object):
 		self.ttl_P4_mrkv.pu()
 		self.ttl_P4_mrkv.speed(0)
 		self.ttl_P4_mrkv.tracer(0,0)
+
+		self.ttl_P5_text = turtle.Turtle()
+		self.ttl_P5_text.ht()
+		self.ttl_P5_text.pu()
+		self.ttl_P5_text.speed(0)
+		self.ttl_P5_text.tracer(0,0)
 
 		self.scr.ontimer(self.cmd_dispatcher, self.DISPATCH_DELAY)
 		self.scr.onclick(self.send_mouse_click)
