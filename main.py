@@ -105,12 +105,11 @@ class Main(threading.Thread):
 						# Send msg
 
 				elif arg[0] == "mrkv":
-					if self.cur_name_mrkv == None:
-						self.send_cmd("on", arg[0], arg[1])
-						self.cur_name_mrkv = arg[1]
-						# Show blanket
-					else:
+					if self.cur_name_mrkv != None:
 						self.send_cmd("off", arg[0], self.cur_name_mrkv)
-						self.send_cmd("on", arg[0], arg[1])
-						self.cur_name_mrkv = arg[1]
-						# Show blanket
+					self.send_cmd("on", arg[0], arg[1])
+					self.cur_name_mrkv = arg[1]
+
+					cur_node_mrkv = self.bn.nodes_by_name[self.cur_name_mrkv]
+					mrkv_blanket = cur_node_mrkv.get_markov_blanket()
+					self.send_cmd("draw_mrkv", [n.name for n in mrkv_blanket])

@@ -22,7 +22,7 @@ class BayesianNetwork(object):
 				l = re.split(r"[>]", l[:-1])
 				l = [i.strip() for i in l]
 				l = filter(None,l)
-				
+
 				name = l[0]
 				parent_names = re.split(r"[\[\], ]", l[1])
 				parent_names = filter(None, parent_names)
@@ -47,3 +47,17 @@ class BayesianNetworkNode(object):
 		self.parents = []
 		self.children = []
 		self.cpt_list = None
+
+	def get_markov_blanket(self):
+		markov_blanket = []
+		for node_p in self.parents:
+			markov_blanket.append(node_p)
+		for node_c in self.children:
+			if node_c not in markov_blanket:
+				markov_blanket.append(node_c)
+			for node_cp in node_c.parents:
+				if node_cp not in markov_blanket:
+					markov_blanket.append(node_cp)
+		if self in markov_blanket:
+			markov_blanket.remove(self)
+		return markov_blanket

@@ -127,6 +127,15 @@ class GUI(object):
 			box.draw_base()
 
 
+	def draw_mrkv_P4(self, node_names):
+		self.ttl_mrkv.clear()
+		mrkv_boxes = []
+		for i,name in enumerate(node_names):
+			mrkv_boxes.append(TextBox(self.ttl_mrkv, self.P4_X + TextBox.WDP, self.P4_Y - TitleBox.HTP - i*TextBox.HTP, name))
+		for box in mrkv_boxes:
+			box.draw_base()
+
+
 	def draw_base_P5(self):
 		self.draw_boundary(self.P5_XP, self.P5_YP, self.P5_HTP, self.P5_WDP)
 
@@ -240,6 +249,8 @@ class GUI(object):
 
 		elif func == "off":
 			self.get_box_by_name(args[0], args[1]).off()
+		elif func == "draw_mrkv":
+			self.draw_mrkv_P4(args[0])
 
 		self.scr.ontimer(self.cmd_dispatcher, self.DISPATCH_DELAY)
 
@@ -256,6 +267,12 @@ class GUI(object):
 		self.ttl_base.pu()
 		self.ttl_base.speed(0)
 		self.ttl_base.tracer(0,0)
+
+		self.ttl_mrkv = turtle.Turtle()
+		self.ttl_mrkv.ht()
+		self.ttl_mrkv.pu()
+		self.ttl_mrkv.speed(0)
+		self.ttl_mrkv.tracer(0,0)
 
 		self.scr.ontimer(self.cmd_dispatcher, self.DISPATCH_DELAY)
 		self.scr.onclick(self.send_mouse_click)
