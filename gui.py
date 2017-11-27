@@ -278,7 +278,8 @@ class GUI(object):
 			self.draw_text_expr_P5(args[0])
 
 		elif func == "display_prob":
-			self.draw_text_prob_P5(args[0])
+			string = str(args[0])
+			self.draw_text_prob_P5(string)
 
 		self.scr.ontimer(self.cmd_dispatcher, self.DISPATCH_DELAY)
 

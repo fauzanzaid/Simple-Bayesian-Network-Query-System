@@ -40,6 +40,7 @@ class BayesianNetwork(object):
 				self.nodes_by_name[pn].children.append(self.nodes_by_name[k])
 
 
+
 class BayesianNetworkNode(object):
 	"""docstring for BayesianNetworkNode"""
 	def __init__(self, name):
@@ -61,3 +62,86 @@ class BayesianNetworkNode(object):
 		if self in markov_blanket:
 			markov_blanket.remove(self)
 		return markov_blanket
+
+
+
+class Event(object):
+	"""docstring for Event"""
+	def __init__(self, node, value=None):
+		self.node = node
+		self.value = value
+
+
+
+class ConditionalProbability(object):
+	"""docstring for ConditionalProbability"""
+	def __init__(self, events_query, events_evidence=[]):
+		self.events_query = events_query
+		self.events_evidence = events_evidence
+
+
+	def to_string(self):
+		string = "P("
+		for event in self.events_query:
+			if event.value == None:
+				string += event.node.name.lower() + ","
+			elif event.value == 0:
+				string += "~" + event.node.name.upper() + ","
+			elif event.value == 1:
+				string += event.node.name.upper() + ","
+
+		if string[-1] == ",":
+			string = string[:-1]
+
+		string += "|"
+
+		for event in self.events_evidence:
+			if event.value == None:
+				string += event.node.name.lower() + ","
+			elif event.value == 0:
+				string += "~" + event.node.name.upper() + ","
+			elif event.value == 1:
+				string += event.node.name.upper() + ","
+
+		if string[-1] == ",":
+			string = string[:-1]
+		elif string[-1] == "|":
+			string = string[:-1]
+
+		string += ")"
+		return string
+
+
+	def evaluate(self, bn):
+		return 0
+
+
+
+def get_cond_prob_from_names(bn, names_qry, names_cond):
+	events_query = []
+	events_evidence = []
+
+	for name in names_qry:
+		value = None
+		if name[0] == "~":
+			name = name[1]
+			value = 0
+		else:
+			name = name
+			value = 1
+		event = Event(bn.nodes_by_name[name], value)
+		events_query.append(event)
+	
+	for name in names_cond:
+		value = None
+		if name[0] == "~":
+			name = name[1]
+			value = 0
+		else:
+			name = name
+			value = 1
+		event = Event(bn.nodes_by_name[name], value)
+		events_evidence.append(event)
+
+	cp = ConditionalProbability(events_query, events_evidence)
+	return cp

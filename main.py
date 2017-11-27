@@ -3,7 +3,7 @@
 
 import threading
 
-from bayesian_network import BayesianNetwork
+from bayesian_network import BayesianNetwork, get_cond_prob_from_names
 
 
 class Main(threading.Thread):
@@ -104,10 +104,11 @@ class Main(threading.Thread):
 							continue
 
 					# Calc
-					self.send_cmd("display_expr", "")
+					cp = get_cond_prob_from_names(self.bn, self.cur_names_qry, self.cur_names_cond)
+					self.send_cmd("display_expr", cp.to_string())
 					self.send_cmd("display_msg", self.MSG_WORKING)
-					# Calc
-					self.send_cmd("display_prob", "")
+					val = cp.evaluate(self.bn)
+					self.send_cmd("display_prob", val)
 
 				elif arg[0] == "mrkv":
 					if self.cur_name_mrkv != None:
