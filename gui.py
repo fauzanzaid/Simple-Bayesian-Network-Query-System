@@ -11,11 +11,12 @@ class GUI(object):
 	
 	DISPATCH_DELAY = 1
 	
-	def __init__(self, qu_usr_ip, qu_cmd):
+	def __init__(self, qu_usr_ip, qu_cmd, max_var=15):
 		self.time_init = time.time()
 		
 		self.qu_usr_ip = qu_usr_ip
 		self.qu_cmd = qu_cmd
+		self.MAX_VAR = max_var
 
 		self.set_constants()
 
@@ -33,9 +34,6 @@ class GUI(object):
 		# └──┬──┴─────┴──┬──┘
 		#    │     5     │   
 		#    └───────────┘   
-
-
-		self.MAX_VAR = 15
 
 		self.LIN_SPC = 16
 		self.P_PAD = 20

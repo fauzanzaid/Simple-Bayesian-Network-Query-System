@@ -11,8 +11,8 @@ qu_usr_ip = Queue.Queue()
 qu_cmd = Queue.Queue()
 
 
-gui = GUI(qu_usr_ip,qu_cmd)
 main = Main(qu_usr_ip, qu_cmd)
+gui = GUI(qu_usr_ip, qu_cmd, len(main.node_names))
 
 main.start()
 gui.run()
