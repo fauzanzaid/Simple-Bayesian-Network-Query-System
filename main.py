@@ -15,12 +15,12 @@ class Main(threading.Thread):
 	MSG_SEL_LMT = "You cannot select more than 10 variables!"
 	MSG_WORKING = "Calculating probability..."
 
-	def __init__(self, qu_usr_ip, qu_cmd):
+	def __init__(self, qu_usr_ip, qu_cmd, input_filename="input1.txt"):
 		super(Main, self).__init__()
 		self.qu_usr_ip = qu_usr_ip
 		self.qu_cmd = qu_cmd
 
-		self.input_filename = "input1.txt"
+		self.input_filename = input_filename
 		self.init_network()
 
 		self.cur_names_qry = []

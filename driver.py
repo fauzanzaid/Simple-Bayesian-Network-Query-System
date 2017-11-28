@@ -11,7 +11,10 @@ qu_usr_ip = Queue.Queue()
 qu_cmd = Queue.Queue()
 
 
-main = Main(qu_usr_ip, qu_cmd)
+input_filename = "input1.txt"
+
+
+main = Main(qu_usr_ip, qu_cmd, input_filename)
 gui = GUI(qu_usr_ip, qu_cmd, len(main.node_names))
 
 main.start()
