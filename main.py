@@ -31,7 +31,7 @@ class Main(threading.Thread):
 	def init_network(self):
 		self.bn = BayesianNetwork()
 		self.bn.init_from_file(self.input_filename)
-		self.node_names = [n.name for n in self.bn.nodes]
+		self.node_names = sorted([n.name for n in self.bn.nodes])
 
 
 	def send_cmd(self, cmd, *args):
