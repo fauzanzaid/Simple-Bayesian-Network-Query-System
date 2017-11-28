@@ -174,16 +174,16 @@ class Probability(object):
 		if len(self.events_query) == 0:
 			# Null event
 			return 0
-		
+
 		if len(self.events_query) == 1:
 			event = next(iter(self.events_query))	# Get the only set element
 			if self in event.node.cpt:
 				# Value exists in CPT
 				return event.node.cpt[self]
-		
+
 		if len(self.events_evidence) == 0:
 			# Chain rule and Marginalization
-			
+
 			# Find all affecting nodes
 			nodes_all = set()
 			for event in self.events_query:
@@ -241,7 +241,7 @@ class Probability(object):
 	def get_chain_inst_from_node_values(self, chain_uninst, values_by_node):
 		chain_inst = []
 		for prob_uninst in chain_uninst:
-			
+
 			events_query_inst = []
 			for event in prob_uninst.events_query:
 				if event.value == None:
@@ -250,7 +250,7 @@ class Probability(object):
 				else:
 					# Event already instantiated
 					events_query_inst.append(event)
-			
+
 			events_evidence_inst = []
 			for event in prob_uninst.events_evidence:
 				if event.value == None:
